@@ -1,0 +1,122 @@
+Problem Statement:
+The task is to find the sum of all prime numbers up to a given integer n. We will use the Sieve of Eratosthenes algorithm to efficiently generate primes and then compute their sum.
+
+import java.util.*;
+
+public class Main {
+    public static int sievePrimeSum(int n) {
+        if (n < 2) return 0; // If n is less than 2, return 0 as there are no primes.
+
+        boolean[] isPrime = new boolean[n + 1];  // Create a boolean array to mark prime numbers.
+        Arrays.fill(isPrime, true);               // Initially, assume all numbers are prime.
+        isPrime[0] = isPrime[1] = false;          // Mark 0 and 1 as non-prime.
+
+        int sum = 0;  // Variable to store the sum of primes.
+
+        // Loop over each number starting from 2 to n.
+        for (int i = 2; i <= n; i++) {
+            if (isPrime[i]) {  // If the current number is marked as prime
+                sum += i;      // Add the number to the sum
+                // Mark all multiples of i as non-prime
+                for (int j = i * i; j <= n; j += i) {
+                    isPrime[j] = false; // Mark the multiples of i as non-prime.
+                }
+            }
+        }
+        return sum;  // Return the sum of all primes.
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);   // Create scanner object for user input.
+        int num = sc.nextInt();                // Read the input number from the user.
+        sc.close();                            // Close the scanner object.
+
+        // Call the sievePrimeSum function and print the result.
+        System.out.println(sievePrimeSum(num)); 
+    }
+}
+
+
+Code Breakdown:
+Input Handling:
+
+The user is prompted to input an integer n, representing the upper limit up to which primes are to be calculated.
+
+Initialization:
+
+A boolean array isPrime[] is created to track whether numbers are prime. Initially, all numbers are assumed to be prime (true), except for indices 0 and 1, which are manually set to false (since 0 and 1 are not prime numbers).
+
+Sieve of Eratosthenes Algorithm:
+
+The outer loop (for (int i = 2; i <= n; i++)) iterates through all numbers from 2 to n. If a number i is still marked as prime, the program adds it to the sum.
+
+The inner loop (for (int j = i * i; j <= n; j += i)) marks the multiples of i as non-prime by setting isPrime[j] to false. The loop starts at i * i because smaller multiples of i would have already been marked by previous primes.
+
+After completing the sieving process, all primes up to n are identified.
+
+Summing Primes:
+
+As the algorithm marks multiples of each prime number as non-prime, the primes themselves are added to the sum in the same loop.
+
+Output:
+
+After calculating the sum, the result is printed, which is the sum of all prime numbers up to n.
+
+Example Walkthrough:
+Let’s consider an example where n = 10:
+
+Initialization:
+
+isPrime[] = [false, false, true, true, true, true, true, true, true, true, true] (indices 0 and 1 are non-prime, others are prime).
+
+Step 1 (i = 2):
+
+Since isPrime[2] = true, sum += 2 → sum = 2.
+
+Mark multiples of 2 as non-prime: isPrime[4] = false, isPrime[6] = false, isPrime[8] = false, isPrime[10] = false.
+
+Updated isPrime[] = [false, false, true, true, false, true, false, true, false, true, false].
+
+Step 2 (i = 3):
+
+Since isPrime[3] = true, sum += 3 → sum = 5.
+
+Mark multiples of 3 as non-prime: isPrime[9] = false.
+
+Updated isPrime[] = [false, false, true, true, false, true, false, true, false, false, false].
+
+Step 3 (i = 4):
+
+Since isPrime[4] = false, skip to the next number.
+
+Step 4 (i = 5):
+
+Since isPrime[5] = true, sum += 5 → sum = 10.
+
+Step 5 (i = 6, 7, 8, 9, 10):
+
+Skip non-prime numbers.
+
+Final sum = 10.
+
+The prime numbers up to n = 10 are: 2, 3, 5, and 7, and their sum is 10.
+
+Time Complexity:
+The outer loop runs for all numbers from 2 to n, i.e., O(n) iterations.
+
+The inner loop, which marks the multiples of each prime, performs work proportional to the harmonic series, summing to O(n log log n) over all iterations.
+
+Thus, the overall time complexity of the Sieve of Eratosthenes is O(n log log n).
+
+Space Complexity:
+The algorithm uses an array isPrime[] of size n + 1 to track the primality of numbers up to n. This requires O(n) space.
+
+The space complexity is therefore O(n).
+
+Summary:
+Time Complexity: O(n log log n)
+
+Space Complexity: O(n)
+
+Final Thoughts:
+The Sieve of Eratosthenes is a very efficient algorithm for generating primes up to a given number, especially when the range of numbers is large. It reduces the time complexity from O(n²) (as in trial division) to O(n log log n), making it a popular choice for prime number generation in many applications like cryptography, number theory, and mathematical computation.
